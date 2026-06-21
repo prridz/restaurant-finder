@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run build",
+  "framework": "react",
+  "outputDirectory": "client/build",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
