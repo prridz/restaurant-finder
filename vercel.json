@@ -1,4 +1,3 @@
 {
-  "buildCommand": "cd client && npm install && npm run build",
-  "public": "client/build"
+  "buildCommand": "cd client && npm install && BUILD_PATH=../public npm run build"
 }
