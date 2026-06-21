@@ -8,19 +8,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const query = `
-      [bbox];
+    const query = `[out:json];
+      area["name"="${city}"]->.searchArea;
       (
-        node["amenity"="restaurant"](${city});
-        way["amenity"="restaurant"](${city});
-        relation["amenity"="restaurant"](${city});
+        node["amenity"="restaurant"](area.searchArea);
+        way["amenity"="restaurant"](area.searchArea);
       );
-      out geom;
+      out center limit 100;
     `;
 
-    const response = await axios.post('https://overpass-api.de/api/interpreter', query, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    });
+    const response = await axios.post('https://overpass-api.de/api/interpreter', query);
 
     const restaurants = extractRestaurants(response.data);
 
@@ -31,7 +28,7 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Error fetching restaurants:', error.message);
-    res.status(500).json({ error: 'Failed to fetch restaurants' });
+    res.status(500).json({ error: 'Failed to fetch restaurants. Try a larger city name.' });
   }
 }
 
