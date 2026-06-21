@@ -2,16 +2,10 @@
   "name": "restaurant-finder",
   "version": "1.0.0",
   "description": "Find restaurants by city",
-  "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm install && npm run build"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
     "axios": "^1.4.0"
-  },
-  "devDependencies": {}
+  }
 }
