@@ -1,3 +1,7 @@
 {
-  "buildCommand": "cd client && npm install && BUILD_PATH=../public npm run build"
+  "buildCommand": "cd client && npm install && BUILD_PATH=../public npm run build",
+  "rewrites": [
+    {"source": "/api/(.*)", "destination": "/api/$1"},
+    {"source": "/(.*)", "destination": "/index.html"}
+  ]
 }
