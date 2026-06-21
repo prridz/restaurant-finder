@@ -2,10 +2,5 @@
   "name": "restaurant-finder",
   "version": "1.0.0",
   "description": "Find restaurants by city",
-  "scripts": {
-    "build": "cd client && npm install && npm run build"
-  },
-  "dependencies": {
-    "axios": "^1.4.0"
-  }
+  "private": true
 }
