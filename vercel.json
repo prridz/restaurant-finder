@@ -1,4 +1,4 @@
 {
-  "buildCommand": "cd client && npm install && npm run build && cd .. && mkdir -p public && cp -r client/build/* public/",
+  "buildCommand": "cd client && npm install && BUILD_PATH=../public npm run build",
   "outputDirectory": "public"
 }
