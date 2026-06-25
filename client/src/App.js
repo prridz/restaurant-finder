@@ -41,6 +41,35 @@ const FOOD_POOL = [
   '1484980972926-edee96e0960d',
 ];
 
+// Overpass mirrors — tried in order so a busy/erroring server falls through to the next
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+];
+
+// Run an Overpass query using the canonical form-encoded body (avoids the 406/CORS issue)
+async function runOverpass(query) {
+  let lastErr;
+  for (const url of OVERPASS_ENDPOINTS) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'data=' + encodeURIComponent(query),
+      });
+      if (!res.ok) {
+        lastErr = new Error(`HTTP ${res.status}`);
+        continue;
+      }
+      return await res.json();
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error('All Overpass endpoints failed');
+}
+
 function App() {
   const [city, setCity] = useState('');
   const [restaurants, setRestaurants] = useState([]);
@@ -125,11 +154,7 @@ function App() {
         );
         out body 5000;`;
 
-      const overpassRes = await fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
-        body: overpassQuery,
-      });
-      const overpassData = await overpassRes.json();
+      const overpassData = await runOverpass(overpassQuery);
 
       const nodes = (overpassData.elements || [])
         .filter((el) => el.tags && el.tags.name)
