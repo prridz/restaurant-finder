@@ -7,7 +7,11 @@ function loadGoogleMaps() {
   if (mapsPromise) return mapsPromise;
   mapsPromise = new Promise((resolve, reject) => {
     if (window.google && window.google.maps) return resolve(window.google);
-    const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    // Client-side Maps key (public by design — protected by HTTP-referrer restrictions
+    // in Google Cloud Console). Env var wins locally; fallback lets the live site work.
+    const key =
+      process.env.REACT_APP_GOOGLE_MAPS_API_KEY ||
+      'AIzaSyDAvQxdo74N4ggYV6Vzt383ngOJAV2pS5o';
     if (!key) return reject(new Error('Missing Google Maps API key'));
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&v=weekly&loading=async`;
